@@ -34,6 +34,9 @@ import swPrecache from 'sw-precache';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import {output as pagespeed} from 'psi';
 import pkg from './package.json';
+import autoprefixer from 'autoprefixer';
+import cssmqpacker from 'css-mqpacker';
+import cssnext from 'cssnext';
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -70,36 +73,57 @@ gulp.task('copy', () =>
 );
 
 // Compile and automatically prefix stylesheets
-gulp.task('styles', () => {
-  const AUTOPREFIXER_BROWSERS = [
-    'ie >= 10',
-    'ie_mob >= 10',
-    'ff >= 30',
-    'chrome >= 34',
-    'safari >= 7',
-    'opera >= 23',
-    'ios >= 7',
-    'android >= 4.4',
-    'bb >= 10'
-  ];
+const AUTOPREFIXER_BROWSERS = [
+  'ie >= 10',
+  'ie_mob >= 10',
+  'ff >= 30',
+  'chrome >= 34',
+  'safari >= 7',
+  'opera >= 23',
+  'ios >= 7',
+  'android >= 4.4',
+  'bb >= 10'
+];
+
+gulp.task('styles', ['css', 'sass']);
+gulp.task('css', () => {
+  let processors = [
+    autoprefixer(AUTOPREFIXER_BROWSERS),
+    cssnext,
+    cssmqpacker,
+  ]
 
   // For best performance, don't add Sass partials to `gulp.src`
   return gulp.src([
-    'app/styles/**/*.scss',
     'app/styles/**/*.css'
   ])
-    .pipe($.newer('.tmp/styles'))
-    .pipe($.sourcemaps.init())
-    .pipe($.sass({
-      precision: 10
-    }).on('error', $.sass.logError))
-    .pipe($.autoprefixer(AUTOPREFIXER_BROWSERS))
-    .pipe(gulp.dest('.tmp/styles'))
-    // Concatenate and minify styles
-    .pipe($.if('*.css', $.minifyCss()))
+  .pipe($.newer('.tmp/styles'))
+  .pipe($.sourcemaps.init())
+  .pipe($.postcss(processors))
+  .pipe(gulp.dest('.tmp/styles'))
+  // Concatenate and minify styles
+  .pipe($.if('*.css', $.minifyCss()))
     .pipe($.size({title: 'styles'}))
-    .pipe($.sourcemaps.write('./'))
-    .pipe(gulp.dest('dist/styles'));
+  .pipe($.sourcemaps.write('./'))
+  .pipe(gulp.dest('dist/styles'));
+});
+
+gulp.task('sass', () => {
+  return gulp.src([
+    'app/styles/**/*.scss'
+  ])
+  .pipe($.newer('.tmp/styles'))
+  .pipe($.sourcemaps.init())
+  .pipe($.sass({
+    precision: 10
+  }).on('error', $.sass.logError))
+  .pipe($.autoprefixer(AUTOPREFIXER_BROWSERS))
+  .pipe(gulp.dest('.tmp/styles'))
+  // Concatenate and minify styles
+  .pipe($.if('*.css', $.minifyCss()))
+    .pipe($.size({title: 'styles'}))
+  .pipe($.sourcemaps.write('./'))
+  .pipe(gulp.dest('dist/styles'));
 });
 
 // Concatenate and minify JavaScript. Optionally transpiles ES2015 code to ES5.
@@ -166,6 +190,7 @@ gulp.task('serve', ['scripts', 'styles'], () => {
     //       will present a certificate warning in the browser.
     // https: true,
     server: ['.tmp', 'app'],
+    host: '0.0.0.0',
     port: 3000
   });
 
