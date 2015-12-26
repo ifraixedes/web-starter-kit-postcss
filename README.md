@@ -1,3 +1,9 @@
+# Web Starter Kit with cssnext via postcss
+
+This is a fork of [Google Web Starter Kit repo](https://github.com/google/web-starter-kit) which a moficiation to support [cssnext](http://cssnext.io/) via [postcss](https://github.com/postcss/postcss).
+
+NOTE: Sass support hasn't been removed not to limit the possibility to [using Material Design Lite's Sass](https://github.com/google/web-starter-kit/blob/master/docs/mdl-sass.md).
+
 # [![Web Starter Kit](https://cloud.githubusercontent.com/assets/110953/11445049/f05512ba-9520-11e5-8fdb-8c8eb5f690d0.jpg)](https://github.com/google/web-starter-kit/releases/latest)
 
 ## Overview
