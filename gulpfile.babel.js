@@ -36,7 +36,7 @@ import {output as pagespeed} from 'psi';
 import pkg from './package.json';
 import autoprefixer from 'autoprefixer';
 import cssmqpacker from 'css-mqpacker';
-import cssnext from 'cssnext';
+import pcssnext from 'postcss-cssnext';
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -89,7 +89,7 @@ gulp.task('styles', ['css', 'sass']);
 gulp.task('css', () => {
   let processors = [
     autoprefixer(AUTOPREFIXER_BROWSERS),
-    cssnext,
+    pcssnext,
     cssmqpacker,
   ]
 
