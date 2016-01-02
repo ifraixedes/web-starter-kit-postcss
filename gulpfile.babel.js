@@ -93,7 +93,7 @@ gulp.task('css', () => {
     }
   };
   let processors = [
-    pcssnext,
+    pcssnext({ browsers: AUTOPREFIXER_BROWSERS }),
     cssmqpacker
   ]
 
