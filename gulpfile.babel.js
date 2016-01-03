@@ -87,11 +87,6 @@ const AUTOPREFIXER_BROWSERS = [
 
 gulp.task('styles', ['css', 'sass']);
 gulp.task('css', () => {
-  let postcssOpts = {
-    autoprefixer: {
-      browsers: AUTOPREFIXER_BROWSERS
-    }
-  };
   let processors = [
     pcssnext({ browsers: AUTOPREFIXER_BROWSERS }),
     cssmqpacker
@@ -103,7 +98,7 @@ gulp.task('css', () => {
   ])
   .pipe($.newer('.tmp/styles'))
   .pipe($.sourcemaps.init())
-  .pipe($.postcss(processors, postcssOpts))
+  .pipe($.postcss(processors))
   .pipe(gulp.dest('.tmp/styles'))
   // Concatenate and minify styles
   .pipe($.if('*.css', $.minifyCss()))
