@@ -88,9 +88,8 @@ const AUTOPREFIXER_BROWSERS = [
 gulp.task('styles', ['css', 'sass']);
 gulp.task('css', () => {
   let processors = [
-    autoprefixer(AUTOPREFIXER_BROWSERS),
-    pcssnext,
-    cssmqpacker,
+    pcssnext({ browsers: AUTOPREFIXER_BROWSERS }),
+    cssmqpacker
   ]
 
   // For best performance, don't add Sass partials to `gulp.src`
